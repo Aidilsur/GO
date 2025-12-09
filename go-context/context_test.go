@@ -57,6 +57,7 @@ func CreateCounter(ctx context.Context) chan int {
 			default:
 				destionation <- counter
 				counter++
+				time.Sleep(1 * time.Second) // simulasi slow, bisa di hapus
 			}
 		}
 	}()
@@ -78,6 +79,25 @@ func TestContextWithCancel(t *testing.T) {
 		}
 	}
 	cancel() // mengirim sinyal cancel ke context
+
+	time.Sleep(2 * time.Second)
+
+	fmt.Println("Total Goroutine", runtime.NumGoroutine())
+}
+
+
+func TestContextWithTimeout(t *testing.T) {
+	fmt.Println("Total Goroutine", runtime.NumGoroutine())
+	parent := context.Background()
+	ctx, cancel := context.WithTimeout(parent, 5 * time.Second)
+
+	defer cancel()
+
+	destionation := CreateCounter(ctx)
+
+	for n := range destionation {
+		fmt.Println("Counter", n)
+	}
 
 	time.Sleep(2 * time.Second)
 
