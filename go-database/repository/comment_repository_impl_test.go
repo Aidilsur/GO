@@ -38,13 +38,15 @@ func TestFindByid(t *testing.T) {
 	fmt.Println(comment)
 }
 
-func TestFindByid(t *testing.T) {
+func TestFindAll(t *testing.T) {
 	commenRepository := NewCommentRepository(go_database.GetConnection())
 
-	comment, err := commenRepository.FindById(context.Background(), 37)
+	comments, err := commenRepository.FindAll(context.Background())
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(comment)
+	for _, comment := range comments {
+		fmt.Println(comment)
+	}
 }
